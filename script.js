@@ -33,7 +33,7 @@ const CONFIG = {
   },
 
   hero: {
-    eyebrow: 'No. 001 · Est. 2026',
+    eyebrow: '', // small label above "Ciao." (empty = hidden)
     lines: [
       'Ciao. 👋',
       'I have a very important, very serious question for you.',
