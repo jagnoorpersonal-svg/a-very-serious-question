@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>A Very Serious Question</title>
+  <meta name="description" content="A very important, very serious question. Takes about two minutes." />
+  <meta name="theme-color" content="#F5EFE6" />
+
+  <!-- Link preview (WhatsApp / iMessage / Instagram) -->
+  <meta property="og:title" content="Ciao. I have a very serious question. 👋" />
+  <meta property="og:description" content="Takes two minutes. Answer honestly. Or don't. I'll know." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>" />
+
+  <!-- Fonts: Fraunces (editorial serif), Manrope (clean sans), Caveat (hand-written ink) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Decide motion mode before first paint (avoids a flash of un-animated content) -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.remove('no-js');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      d.classList.add(reduce ? 'rm' : 'motion');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ============ BACKGROUND WORLD (fixed, parallax layers) ============ -->
+  <div class="world" aria-hidden="true">
+    <div class="world__cam">
+      <div class="layer layer--far" data-depth="0.25"></div>
+      <div class="layer layer--mid" data-depth="0.9"></div>
+      <div class="layer layer--near" data-depth="1.6"></div>
+    </div>
+  </div>
+  <div class="night" aria-hidden="true"></div>
+
+  <!-- Mood overlays used by the rating slider -->
+  <div class="mood-grey" aria-hidden="true"></div>
+  <div class="rain" aria-hidden="true"></div>
+  <div class="hearts-rise" aria-hidden="true"></div>
+
+  <!-- ============ CHROME ============ -->
+  <div class="progress" aria-hidden="true"><div class="progress__bar"></div></div>
+
+  <header class="chrome">
+    <div class="chrome__mark" aria-hidden="true">
+      <span class="chrome__monogram"></span>
+      <span class="chrome__tag" data-copy="ui.tag"></span>
+    </div>
+
+    <div class="pill" aria-live="polite">
+      <span class="pill__text"></span>
+      <span class="pill__dots"></span>
+    </div>
+
+    <button class="sound" type="button" aria-pressed="false" aria-label="Play background music">
+      <svg class="sound__off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+      <svg class="sound__on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ THE STORY ============ -->
+  <main id="story">
+
+    <!-- Scene 0: Hero -->
+    <section class="scene scene--tall scene--hero" id="hero">
+      <div class="stage">
+        <div class="hero__inner">
+          <p class="eyebrow hero__eyebrow" data-copy="hero.eyebrow"></p>
+          <h1 class="hero__lines"></h1>
+          <p class="hero__meta"></p>
+        </div>
+        <div class="hero__hint" aria-hidden="true">
+          <span class="hero__hint-label" data-copy="hero.scrollHint"></span>
+          <span class="hero__hint-line"><i></i></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenes 1–5: quiz questions are rendered here from CONFIG.quiz -->
+
+    <!-- Scene 6: Quiz result -->
+    <section class="scene scene--tall scene--result" id="result">
+      <div class="stage">
+        <div class="card-wrap">
+          <article class="card card--result">
+            <p class="eyebrow" data-copy="result.eyebrow"></p>
+            <p class="result__label" data-copy="result.label"></p>
+            <p class="result__score display">
+              <span class="result__num">0</span><span class="result__slash">/</span><span class="result__total">5</span>
+            </p>
+            <div class="result__dots" aria-hidden="true"></div>
+            <p class="result__verdict"></p>
+            <p class="result__hint hand" data-copy="result.hint"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scene 7: Rate him -->
+    <section class="scene scene--tall scene--rating" id="rating">
+      <div class="stage">
+        <div class="card-wrap">
+          <article class="card card--rating">
+            <p class="eyebrow" data-copy="rating.eyebrow"></p>
+            <h2 class="card__title" data-copy="rating.heading"></h2>
+
+            <div class="meter">
+              <p class="meter__num display" aria-hidden="true"><span class="meter__value">10</span><span class="meter__of">/10</span></p>
+              <div class="meter__sticker" aria-hidden="true"></div>
+            </div>
+            <p class="meter__caption" aria-live="polite"></p>
+
+            <div class="slider" role="slider" tabindex="0" data-lenis-prevent
+                 aria-valuemin="0" aria-valuemax="10" aria-valuenow="10" aria-label="Rating out of 10">
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__ticks"></div>
+              </div>
+              <div class="slider__thumb"><span aria-hidden="true">♥</span></div>
+            </div>
+            <div class="slider__ends" aria-hidden="true"><span>0 😭</span><span>😍 10</span></div>
+
+            <p class="rating__hint hand" data-copy="rating.hint"></p>
+            <button class="btn btn--primary btn--block lock" type="button"></button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scene 8: The build-up -->
+    <section class="scene scene--build" id="build">
+      <div class="stage stage--build">
+        <div class="build__inner">
+          <div class="build__lines"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scene 9: The big question -->
+    <section class="scene scene--finale" id="finale">
+      <div class="finale">
+        <div class="cal-wrap">
+          <div class="cal" aria-label="Calendar page">
+            <div class="cal__rings" aria-hidden="true"><i></i><i></i></div>
+            <div class="cal__head">
+              <div>
+                <p class="cal__month display"></p>
+                <p class="cal__it hand"></p>
+              </div>
+              <p class="cal__year display"></p>
+            </div>
+            <div class="cal__grid"></div>
+          </div>
+          <p class="cal__note hand" data-copy="finale.calendarNote"></p>
+        </div>
+
+        <div class="ask">
+          <p class="eyebrow ask__eyebrow" data-copy="finale.eyebrow"></p>
+          <h2 class="ask__title display"></h2>
+          <p class="ask__sub"></p>
+          <div class="ask__btns">
+            <button class="btn btn--primary btn--xl yes" type="button"></button>
+            <button class="btn btn--ghost btn--xl no" type="button"></button>
+          </div>
+          <p class="ask__fine"></p>
+        </div>
+
+        <div class="success" hidden>
+          <p class="eyebrow" data-copy="finale.success.eyebrow"></p>
+          <h2 class="success__title display"></h2>
+          <p class="success__reluctant hand" hidden></p>
+          <p class="success__days"></p>
+          <div class="countdown" role="timer" aria-live="off">
+            <div><b data-cd="d">0</b><span>days</span></div>
+            <div><b data-cd="h">00</b><span>hours</span></div>
+            <div><b data-cd="m">00</b><span>min</span></div>
+            <div><b data-cd="s">00</b><span>sec</span></div>
+          </div>
+          <p class="success__sub"></p>
+          <div class="success__btns">
+            <button class="btn btn--dark btn--xl ics" type="button"></button>
+            <a class="btn btn--primary btn--xl wa" target="_blank" rel="noopener"></a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot"><p></p></footer>
+    </section>
+  </main>
+
+  <!-- Top-most visual layers -->
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============ LIBRARIES (pinned versions) ============ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
