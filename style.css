@@ -1130,30 +1130,6 @@ html.rm .no { transition: none; }
 
 /* 14. SMALL + LARGE SCREENS ------------------------------------------------ */
 
-/* Short phones (iPhone SE, small Androids): make sure each locked card fits */
-@media (max-height: 700px) {
-  :root { --chrome-h: 58px; }
-  .card { padding: 22px 16px 18px; border-radius: 24px; }
-  .card__title { font-size: clamp(24px, 6.8vw, 32px); margin-top: 8px; }
-  .options { gap: 8px; margin-top: 16px; }
-  .option { min-height: 50px; padding: 8px 12px; font-size: 15px; }
-  .option__key { width: 28px; height: 28px; }
-  .feedback { margin-top: 12px; gap: 10px; }
-  .feedback__line { font-size: 17px; }
-  .qsticker { width: 76px; height: 76px; top: -24px; }
-  .qsticker .sticker__emoji { font-size: 52px; }
-  .meter { height: 104px; margin-top: 8px; }
-  .meter__num { font-size: 96px; }
-  .meter__sticker { width: 84px; height: 84px; }
-  .meter__sticker .sticker__emoji { font-size: 58px; }
-  .meter__caption { font-size: 18px; }
-  .slider { height: 56px; margin-top: 8px; }
-  .rating__hint { margin: 8px 0 10px; font-size: 17px; }
-  .result__score { font-size: 112px; }
-  .cal { padding: 22px 14px 12px; }
-  .cal__day { height: 28px; }
-}
-
 @media (min-width: 420px) {
   :root { --gutter: 20px; }
   .card { padding: 30px 26px 26px; }
@@ -1184,6 +1160,31 @@ html.rm .no { transition: none; }
 
 @media (min-width: 1200px) {
   .ask__title { font-size: 88px; }
+}
+
+/* Short screens (small phones, in-app browsers, laptop windows).
+   Comes after the desktop rules so it wins on short laptops too. */
+@media (max-height: 700px) {
+  :root { --chrome-h: 58px; }
+  .card { padding: 22px 16px 18px; border-radius: 24px; }
+  .card__title { font-size: clamp(24px, 6.8vw, 32px); margin-top: 8px; }
+  .options { gap: 8px; margin-top: 16px; }
+  .option { min-height: 50px; padding: 8px 12px; font-size: 15px; }
+  .option__key { width: 28px; height: 28px; }
+  .feedback { margin-top: 12px; gap: 10px; }
+  .feedback__line { font-size: 17px; }
+  .qsticker { width: 76px; height: 76px; top: -24px; }
+  .qsticker .sticker__emoji { font-size: 52px; }
+  .meter { height: 104px; margin-top: 8px; }
+  .meter__num { font-size: 96px; }
+  .meter__sticker { width: 84px; height: 84px; }
+  .meter__sticker .sticker__emoji { font-size: 58px; }
+  .meter__caption { font-size: 18px; }
+  .slider { height: 56px; margin-top: 8px; }
+  .rating__hint { margin: 8px 0 10px; font-size: 17px; }
+  .result__score { font-size: 112px; }
+  .cal { padding: 22px 14px 12px; }
+  .cal__day { height: 28px; }
 }
 
 /* Hover niceties for mouse users only (never required) */

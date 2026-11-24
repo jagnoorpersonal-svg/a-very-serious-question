@@ -639,6 +639,60 @@ const CONFIG = {
     },
   };
 
+  /* Fit: scale each scene down so it always fits the screen height
+     (short laptop windows, small phones, in-app browsers). */
+  const Fit = {
+    /** Height a card will need, including the answer feedback that appears later */
+    natural(target) {
+      const card = target.querySelector('.card--q');
+      const fb = card && $('.feedback', card);
+      let restore = null;
+      if (fb && !fb.classList.contains('is-on')) {
+        const line = $('.feedback__line', fb), next = $('.btn--next', fb);
+        const q = QUESTIONS[+card.closest('.scene--q').dataset.index];
+        const old = [line.innerHTML, next.textContent];
+        const a = fmt(q.correctLine), b = fmt(q.wrongLine);
+        fb.classList.add('is-on');
+        line.innerHTML = a.length > b.length ? a : b;
+        next.textContent = CONFIG.quiz.nextLabelWrong;
+        restore = () => { fb.classList.remove('is-on'); line.innerHTML = old[0]; next.textContent = old[1]; };
+      }
+      // The score verdict is filled in later: measure with the longest one
+      const verdict = $('.result__verdict', target);
+      if (verdict && !verdict.textContent) {
+        const R = CONFIG.result;
+        verdict.innerHTML = fmt([R.perfect, R.good, R.low].sort((x, y) => y.length - x.length)[0]);
+        const prev = restore;
+        restore = () => { verdict.innerHTML = ''; if (prev) prev(); };
+      }
+      const h = target.offsetHeight + (card ? 26 : 0); // room for the sticker poking out
+      if (restore) restore();
+      return h;
+    },
+
+    run() {
+      const H = window.innerHeight;
+      $$('.stage').forEach((stage) => {
+        const target = $('.card-wrap, .hero__inner, .build__inner', stage);
+        if (!target) return;
+        target.style.scale = '';
+        target.style.marginTop = target.style.marginBottom = '';
+        const cs = getComputedStyle(stage);
+        let avail = Math.min(stage.clientHeight || H, H) - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+        if (target.classList.contains('hero__inner')) avail -= 64;            // scroll hint
+        if (target.classList.contains('build__inner') && MOTION) avail /= 1.12; // camera push-in
+        const h = this.natural(target);
+        const s = h > 0 ? Math.min(1, avail / h) : 1;
+        if (s < 0.995) {
+          target.style.scale = s.toFixed(3);
+          // Shrink the layout box too, so it stays centred and nothing scrolls
+          const m = `${(-(h - h * s) / 2).toFixed(1)}px`;
+          target.style.marginTop = target.style.marginBottom = m;
+        }
+      });
+    },
+  };
+
   /* Per-frame scroll work: locking, quiz pill, night mode, rating moods */
   let ticking = false;
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
@@ -1364,6 +1418,7 @@ const CONFIG = {
     gsap.set('.cal__note', { y: 10 });
     ST.create({ trigger: '#finale', start: 'top 45%', onEnter: finaleIntro });
 
+    ST.addEventListener('refreshInit', () => Fit.run());
     ST.addEventListener('refresh', () => Sections.measure());
     window.addEventListener('load', () => ST.refresh());
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ST.refresh());
@@ -1410,10 +1465,11 @@ const CONFIG = {
     };
     once($('.card--result'), runResult);
 
+    const refit = () => { Fit.run(); Sections.measure(); };
     let t;
-    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => Sections.measure(), 150); });
-    window.addEventListener('load', () => Sections.measure());
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => Sections.measure());
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(refit, 150); });
+    window.addEventListener('load', refit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
   }
 
   /* ---------- 14. Init ----------------------------------------------------- */
@@ -1441,6 +1497,7 @@ const CONFIG = {
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    Fit.run();
     if (MOTION) setupMotion(); else setupReduced();
     Sections.measure();
 
